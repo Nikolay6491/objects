@@ -14,6 +14,8 @@ data class Post(
     val reposts: Reposts, //Информация о репостах записи («Рассказать друзьям»).
     val views: Views, //Информация о просмотрах записи.
     val post_type: String, //Тип записи.
+    val post_source: Source, //Информация о способе размещения записи
+    val geo: Geo, //Информация о местоположении
     val signer_id: Int, //Идентификатор автора, если запись была опубликована от имени сообщества и подписана пользователем.
     val can_pin: Boolean, //Информация о том, может ли текущий пользователь закрепить запись.
     val can_delete: Boolean, //Информация о том, может ли текущий пользователь удалить запись.
@@ -22,7 +24,8 @@ data class Post(
     val marked_as_ads: Boolean, //Информация о том, содержит ли запись отметку "реклама"
     val is_favorite: Boolean, //true, если объект добавлен в закладки у текущего пользователя.
     val donut: Donut, //Информация о записи VK Donut.
-    val postponed_id: Int //Идентификатор отложенной записи. Это поле возвращается тогда, когда запись стояла на таймере.
+    val postponed_id: Int, //Идентификатор отложенной записи. Это поле возвращается тогда, когда запись стояла на таймере.
+    val attachments: Array<Attachment>
 )
 
 data class Comments(
@@ -56,12 +59,44 @@ data class Views(
     val count: Int //число просмотров записи
 )
 
+data class Source(
+    val type: String, //Тип источника.
+    val platform: String, //Название платформы, если оно доступно.
+    val data: String, //Тип действия (только для type = vk или widget).
+    val url: String //URL ресурса, с которого была опубликована запись.
+)
+
+data class Geo(
+    val type: String, // Тип места.
+    val coordinates: String,// Координаты места.
+    val place: Place // Описание места (если оно добавлено).
+)
+
+data class Place(
+    val id: Int, //Идентификатор места.
+    val title: String, //Название места.
+    val latitude: Int, //Географическая широта, заданная в градусах (от -90 до 90).
+    val longitude: Int, //Географическая широта, заданная в градусах (от -90 до 90).
+    val created: Int, //Дата создания места в Unixtime.
+    val icon: String, //Иконка места, URL изображения.
+    val checkins: Int, //Число отметок в этом месте.
+    val updated: Int, //Дата обновления места в Unixtime.
+    val type: Int, //Тип места.
+    val country: Int, //Идентификатор страны.
+    val city: Int, //Идентификатор города.
+    val address: String //Адрес места.
+)
+
 data class Donut(
     val is_donut: Boolean, //запись доступна только платным подписчикам VK Donut
     val paid_duration: Int, //время, в течение которого запись будет доступна только платным подписчикам VK Donut
     val can_publish_free_copy: Boolean, //можно ли открыть запись для всех пользователей, а не только подписчиков VK Donut
     val edit_mode: String //информация о том, какие значения VK Donut можно изменить в записи
 )
+
+interface Attachment {
+    val type: String
+}
 
 object WallService {
     private var posts = emptyArray<Post>()
@@ -111,6 +146,10 @@ fun main() {
         Reposts(15, true),
         Views(1000),
         "post",
+        Source("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Саратов", "51.544413, 46.050268",
+            Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                10,9052000,1,643,8452,"Парк Победы")),
         11,
         true,
         true,
@@ -119,7 +158,8 @@ fun main() {
         false,
         true,
         Donut(false, 0, false, ""),
-        11
+        11,
+        arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 100,100))))
     )
 
     var postTwo = Post(
@@ -138,6 +178,10 @@ fun main() {
         Reposts(14, true),
         Views(1200),
         "post",
+        Source("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Саратов", "51.544413, 46.050268",
+            Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                10,9052000,1,643,8452,"Парк Победы")),
         12,
         true,
         true,
@@ -146,7 +190,8 @@ fun main() {
         false,
         true,
         Donut(false, 0, false, ""),
-        12
+        12,
+        arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 100,100))))
     )
 
     var postThree = Post(
@@ -165,6 +210,10 @@ fun main() {
         Reposts(104, true),
         Views(2300),
         "post",
+        Source("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Саратов", "51.544413, 46.050268",
+            Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                10,9052000,1,643,8452,"Парк Победы")),
         13,
         true,
         true,
@@ -173,7 +222,8 @@ fun main() {
         false,
         true,
         Donut(false, 0, false, ""),
-        13
+        13,
+        arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 100,100))))
     )
 
     var postOneUpdate = Post(
@@ -192,6 +242,10 @@ fun main() {
         Reposts(25, true),
         Views(700),
         "post",
+        Source("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Саратов", "51.544413, 46.050268",
+            Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                10,9052000,1,643,8452,"Парк Победы")),
         11,
         true,
         true,
@@ -200,7 +254,8 @@ fun main() {
         false,
         true,
         Donut(false, 0, false, ""),
-        11
+        11,
+        arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 100,100))))
     )
     WallService.add(postOne)
     WallService.add(postTwo)

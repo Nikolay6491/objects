@@ -3,9 +3,15 @@ package ru.netology
 import Comments
 import Copyright
 import Donut
+import Geo
 import Likes
+import Photo
+import Place
 import Post
 import Reposts
+import Sizes
+import Source
+import Video
 import Views
 import WallService
 import org.junit.Test
@@ -32,6 +38,10 @@ class WallTests {
             Reposts(15, true),
             Views(1000),
             "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
             11,
             true,
             true,
@@ -40,7 +50,8 @@ class WallTests {
             false,
             true,
             Donut(false, 0, false, ""),
-            11
+            11,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480)))),
         )
 
         val nextId = postAdd.id
@@ -66,6 +77,10 @@ class WallTests {
             Reposts(15, true),
             Views(1000),
             "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
             11,
             true,
             true,
@@ -74,7 +89,8 @@ class WallTests {
             false,
             true,
             Donut(false, 0, false, ""),
-            11
+            11,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480))))
         ))
         service.add(Post(
             2,
@@ -92,6 +108,10 @@ class WallTests {
             Reposts(14, true),
             Views(1200),
             "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
             12,
             true,
             true,
@@ -100,7 +120,8 @@ class WallTests {
             false,
             true,
             Donut(false, 0, false, ""),
-            12
+            12,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480))))
         ))
         service.add(Post(
             3,
@@ -118,6 +139,10 @@ class WallTests {
             Reposts(104, true),
             Views(2300),
             "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
             13,
             true,
             true,
@@ -126,7 +151,8 @@ class WallTests {
             false,
             true,
             Donut(false, 0, false, ""),
-            13
+            13,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480))))
         ))
 
         val update1 = Post(
@@ -145,6 +171,10 @@ class WallTests {
             Reposts(25, true),
             Views(700),
             "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
             11,
             true,
             true,
@@ -153,7 +183,8 @@ class WallTests {
             false,
             true,
             Donut(false, 0, false, ""),
-            11
+            11,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480))))
         )
 
         val update2 = Post(
@@ -172,6 +203,10 @@ class WallTests {
             Reposts(25, true),
             Views(700),
             "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
             11,
             true,
             true,
@@ -180,7 +215,8 @@ class WallTests {
             false,
             true,
             Donut(false, 0, false, ""),
-            31
+            31,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480))))
         )
 
         val result1 = service.update(update1)
