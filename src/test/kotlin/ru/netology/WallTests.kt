@@ -1,13 +1,16 @@
 package ru.netology
 
+import Comment
 import Comments
 import Copyright
+import Donat
 import Donut
 import Geo
 import Likes
 import Photo
 import Place
 import Post
+import PostNotFoundException
 import Reposts
 import Sizes
 import Source
@@ -17,6 +20,7 @@ import WallService
 import org.junit.Test
 
 import org.junit.Assert.*
+import Сomment_thread
 
 class WallTests {
 
@@ -225,4 +229,87 @@ class WallTests {
         val result2 = service.update(update2)
         assertFalse(result2)
     }
+
+    @Test(expected = PostNotFoundException::class)
+    fun createComment() {
+        val commentOne = Comment(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null, Сomment_thread(0,true,true,true))
+        WallService.createComment(11,commentOne)
+    }
+
+    @Test
+    fun createCommentTrueId() {
+        val commentOne = Comment(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null,Сomment_thread(0,true,true,true))
+        var postOne = Post(
+            1,
+            11,
+            11,
+            11,
+            11072022,
+            "message1",
+            10,
+            2,
+            false,
+            Comments(25, true, true, true, true),
+            Copyright(11, "www.netology.ru", "data class", "Post"),
+            Likes(15, true, true, true),
+            Reposts(15, true),
+            Views(1000),
+            "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
+            11,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
+            Donut(false, 0, false, ""),
+            11,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 100,100))))
+        )
+        WallService.add(postOne)
+        assertEquals(commentOne,WallService.createComment(1, commentOne))
+    }
+
+    @Test
+    fun createCommentFalseId() {
+        val commentOne = Comment(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null,Сomment_thread(0,true,true,true))
+        val update2 = Post(
+            4,
+            32,
+            23,
+            32,
+            13072022,
+            "message4",
+            10,
+            2,
+            false,
+            Comments(65, true, true, true, true),
+            Copyright(31, "www.netology.ru", "data class", "Post"),
+            Likes(15, true, true, true),
+            Reposts(25, true),
+            Views(700),
+            "post",
+            Source("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Саратов", "51.544413, 46.050268",
+                Place(1,"Журавли",51544413,46050268,2041980,"https://upload.wikimedia.org/wikipedia/ru/thumb/6/6f/Памятник_Журавли_%28Саратов%29.jpg/1280px-Памятник_Журавли_%28Саратов%29.jpg",
+                    10,9052000,1,643,8452,"Парк Победы")),
+            11,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
+            Donut(false, 0, false, ""),
+            31,
+            arrayOf(Photo(1,1,1,1,"Photo1",11072022, arrayOf(Sizes("m","Photo1", 640,480))))
+        )
+        WallService.add(update2)
+        assertEquals(commentOne,WallService.createComment(1, commentOne))
+    }
 }
+

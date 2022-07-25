@@ -98,9 +98,36 @@ interface Attachment {
     val type: String
 }
 
+data class Comment(
+    val id: Int, //Идентификатор комментария.
+    val from_id: Int, //Идентификатор автора комментария.
+    val date: Int, //Дата создания комментария в формате Unixtime.
+    val text: String, //Текст комментария.
+    val donut: Donat, //Информация о VK Donut.
+    val reply_to_user: Int, //Идентификатор пользователя или сообщества, в ответ которому оставлен текущий комментарий (если применимо).
+    val reply_to_comment: Int, //Идентификатор комментария, в ответ на который оставлен текущий (если применимо).
+    val attachment: Attachment?, //Медиавложения комментария (фотографии, ссылки и т.п.).
+    val thread: Сomment_thread //Информация о вложенной ветке комментариев.
+)
+
+data class Donat(
+    val is_don: Boolean, //Является ли комментатор подписчиком VK Donut.
+    val placeholder: String  //Заглушка для пользователей, которые не оформили подписку VK Donut.
+)
+
+data class Сomment_thread(
+    val count: Int,
+    val can_post: Boolean,
+    val show_reply_button: Boolean,
+    val groups_can_post: Boolean
+)
+
+class PostNotFoundException(message: String): RuntimeException(message)
+
 object WallService {
     private var posts = emptyArray<Post>()
     private var origId = 0
+    private var comments = emptyArray<Comment>()
 
     fun add(post: Post): Post {
         var originId = true
@@ -126,6 +153,21 @@ object WallService {
             }
         }
         return isUpdate
+    }
+
+    fun createComment(postId: Int, comment: Comment): Comment {
+        var isPost = false
+        for ((index, postCheck) in posts.withIndex()) {
+            if (postCheck.id == postId) {
+                isPost = true
+            }
+        }
+        if (isPost == true) {
+            comments += comment
+        } else {
+            throw  PostNotFoundException("Такого поста нет!")
+        }
+        return comments.last()
     }
 }
 
@@ -261,4 +303,6 @@ fun main() {
     WallService.add(postTwo)
 
     WallService.add(postTwo)
+
+    val commentOne = Comment(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null, Сomment_thread(0,true,true,true))
 }
